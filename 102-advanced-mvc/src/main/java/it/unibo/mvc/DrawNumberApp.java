@@ -10,10 +10,6 @@ import java.util.List;
  * Application entry point for DrawNumber game.
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
-    private static final int MIN = 0;
-    private static final int MAX = 100;
-    private static final int ATTEMPTS = 10;
-
     private final DrawNumber model;
     private final List<DrawNumberView> views;
 
@@ -28,11 +24,17 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
          * Side-effect proof
          */
         this.views = Arrays.asList(Arrays.copyOf(views, views.length));
-        for (final DrawNumberView view: views) {
+        for (final DrawNumberView view : views) {
             view.setObserver(this);
             view.start();
         }
-        this.model = new DrawNumberImpl(MIN, MAX, ATTEMPTS);
+        final ConfigurationFileReader cf = new ConfigurationFileReader("config.yml");
+        if (!cf.parse()) {
+            for (final DrawNumberView view : views) {
+                view.displayError("Failed to load configuration.");
+            }
+        }
+        this.model = new DrawNumberImpl(cf.getMinimum(), cf.getMaximum(), cf.getAttempts());
     }
 
     @Override
