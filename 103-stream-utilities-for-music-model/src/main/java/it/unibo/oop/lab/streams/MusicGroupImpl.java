@@ -86,8 +86,7 @@ public final class MusicGroupImpl implements MusicGroup {
             .entrySet()
             .stream()
             .max(Comparator.comparingDouble(Entry::getValue))
-            .get()
-            .getKey();
+            .flatMap(Entry::getKey);
     }
 
     private static final class Song {
