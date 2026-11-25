@@ -82,6 +82,7 @@ final class TestMusicGroup {
             "Whole Lotta Love"
         );
         final List<String> actual = lz.orderedSongNames().collect(toList());
+        IO.println(actual);
         assertEquals(result, actual);
     }
 
